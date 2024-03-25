@@ -1,6 +1,6 @@
 package gopaheal
 
-func GetPosts(tags []string) ([]string, error) {
+func GetPosts(tags []string) (allPosts []string, err error) {
 	url := constructUrl(1, tags)
 
 	count, err := getLastPage(url)
@@ -23,9 +23,7 @@ func GetPosts(tags []string) ([]string, error) {
 	return allPosts, nil
 }
 
-func GetPostsSlice(tags []string) ([][]string, error) {
-	var allPostsSliced [][]string
-
+func GetPostsSlice(tags []string) (allPostsSliced [][]string, err error) {
 	url := constructUrl(1, tags)
 
 	count, err := getLastPage(url)
