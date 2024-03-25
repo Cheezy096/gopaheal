@@ -9,8 +9,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-var allPosts []string
-
 func constructUrl(page int, tags []string) string {
 	tagsJoined := strings.Join(tags, "%20")
 	return fmt.Sprintf("https://rule34.paheal.net/post/list/%s/%d", tagsJoined, page)
