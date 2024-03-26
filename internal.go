@@ -2,7 +2,6 @@ package gopaheal
 
 import (
 	"fmt"
-	"net/http"
 	"strconv"
 	"strings"
 	"time"
@@ -16,16 +15,7 @@ func constructUrl(page int, tags []string) string {
 }
 
 func getLastPage(url string) (int, error) {
-	res, err := http.Get(url)
-	if err != nil {
-		return 0, err
-	}
-	defer res.Body.Close()
-	if res.StatusCode != 200 {
-		return 0, fmt.Errorf("status code error: %d %s", res.StatusCode, res.Status)
-	}
-
-	doc, err := goquery.NewDocumentFromReader(res.Body)
+	doc, err := goquery.NewDocument(url)
 	if err != nil {
 		return 0, err
 	}
@@ -63,16 +53,7 @@ func getPosts(url string) ([]string, error) {
 	var posts []string
 
 	for failed < 100 {
-		res, err := http.Get(url)
-		if err != nil {
-			return nil, err
-		}
-		defer res.Body.Close()
-		if res.StatusCode != 200 {
-			return nil, fmt.Errorf("status code error: %d %s", res.StatusCode, res.Status)
-		}
-
-		doc, err := goquery.NewDocumentFromReader(res.Body)
+		doc, err := goquery.NewDocument(url)
 		if err != nil {
 			return nil, err
 		}
@@ -95,6 +76,7 @@ func getPosts(url string) ([]string, error) {
 			failed += 1
 			time.Sleep(2 * time.Second)
 		} else {
+			failed = 5
 			return posts, nil
 		}
 	}
